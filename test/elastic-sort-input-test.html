@@ -1,0 +1,48 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../elastic-sort-input.html">
+</head>
+
+<body>
+  <test-fixture id="elastic-sort-input-fixture">
+    <template>
+      <elastic-sort-input></elastic-sort-input>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('elastic-sort-input', function() {
+      var component;
+
+      setup(function() {
+        component = fixture('elastic-sort-input-fixture');
+      });
+
+      test('expect field property to have default value', function() {
+        expect(component.field).to.be.equal('_timestamp');
+      });
+
+      test('expect orderOptions to be set', function() {
+        expect(component.orderOptions).to.be.deep.equal([{display: 'Best Match'}, {display: 'Newest', order: 'desc'}, {display: 'Oldest', order: 'asc'}]);
+      });
+
+      test('selectedOption is set to default value', function() {
+        expect(component.selectedOption).to.be.deep.equal({display: 'Best Match'});
+      });
+
+      test('sortString is set to expected value', function() {
+        expect(component.sortString).to.be.deep.equal('Sort("_score").order("desc")');
+      });
+
+      test('when selectedOption changes, sortString is updated', function() {
+        component.selectedOption = component.orderOptions[1];
+        expect(component.sortString).to.be.deep.equal('Sort("_timestamp").order("desc")');
+      });
+    });
+  </script>
+</body>
+</html>
