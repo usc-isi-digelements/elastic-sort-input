@@ -38,9 +38,18 @@
         expect(component.sortString).to.be.deep.equal('Sort("_score").order("desc")');
       });
 
+      test('notificationQuery is set to expected value', function() {
+        expect(component.notificationQuery).to.be.equal(false);
+      });
+
       test('when selectedOption changes, sortString is updated', function() {
         component.selectedOption = component.orderOptions[1];
         expect(component.sortString).to.be.deep.equal('Sort("_timestamp").order("desc")');
+      });
+
+      test('when notificationQuery is set to true, selectedOption is updated', function() {
+        component.notificationQuery = true;
+        expect(component.selectedOption).to.be.deep.equal({display: 'Newest', order: 'desc'});
       });
     });
   </script>

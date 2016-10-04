@@ -71,7 +71,7 @@ Example:
         selectedOption: {
           type: Object,
           notify: true,
-          observer: 'onSelectedOptionChange'
+          observer: '_onSelectedOptionChange'
         },
         /*
         * String to be passed along to the elastic-sort component
@@ -80,17 +80,31 @@ Example:
           type: String,
           notify: true,
           readOnly: true
+        },
+        /**
+         * If viewing a saved query with a notification for new results, sort by newest.
+         */
+        notificationQuery: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: '_sortByNewest'
         }
       },
       ready: function() {
         this.selectedOption = this.orderOptions[0];
       },
-      onSelectedOptionChange: function() {
+      _onSelectedOptionChange: function() {
         if(this.selectedOption.order && this.field) {
           this._setSortString('Sort("' + this.field + '").order("' + this.selectedOption.order + '")');
         } else {
           // use default sort
           this._setSortString('Sort("_score").order("desc")');
+        }
+      },
+      _sortByNewest: function() {
+        if(this.notificationQuery) {
+          this.selectedOption = this.orderOptions[1];
         }
       }
     });
