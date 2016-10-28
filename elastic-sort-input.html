@@ -90,16 +90,6 @@ Example:
         },
 
         /**
-         * If viewing a saved query with a notification for new results, sort by newest.
-         */
-        notificationQuery: {
-          type: Boolean,
-          value: false,
-          notify: true,
-          observer: '_sortByNewest'
-        },
-
-        /**
          * List of options shown in the menu.
          */
         _menuOptions: {
@@ -121,15 +111,6 @@ Example:
           };
         });
         return menuOptions;
-      },
-
-      _sortByNewest: function() {
-        var index = this._menuOptions.map(function(option) {
-          return option.display;
-        }).indexOf('Newest');
-        if(this.notificationQuery && index >= 0) {
-          this.selected = this._menuOptions[index].value;
-        }
       }
     });
   })();

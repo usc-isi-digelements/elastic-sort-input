@@ -114,29 +114,6 @@
           value: 'Sort("field3").order("desc")'
         }]);
       });
-
-      test('setting "notificationQuery" does set selected to the correct value', function() {
-        component.notificationQuery = true;
-        expect(component.selected).to.equal('Sort("_timestamp").order("desc")');
-      });
-
-      test('setting "notificationQuery" with custom options does set selected to the correct value', function() {
-        component.options = [{
-          display: 'Sort 1',
-          field: 'field1',
-          order: 'desc'
-        }, {
-          display: 'Sort 2',
-          field: 'field2',
-          order: 'desc'
-        }, {
-          display: 'Newest',
-          field: 'field3',
-          order: 'desc'
-        }];
-        component.notificationQuery = true;
-        expect(component.selected).to.equal('Sort("field3").order("desc")');
-      });
     });
   </script>
 </body>
