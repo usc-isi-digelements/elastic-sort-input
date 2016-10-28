@@ -6,7 +6,7 @@ Example:
 ```html
     <elastic-sort-input
         field="date"
-        sort-string="{{sortString}}">
+        selected="{{selected}}">
     </elastic-sort-input>
 ```
 

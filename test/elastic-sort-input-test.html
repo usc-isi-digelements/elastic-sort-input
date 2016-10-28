@@ -18,29 +18,124 @@
     suite('elastic-sort-input', function() {
       var component;
 
-      setup(function() {
+      setup(function(done) {
         component = fixture('elastic-sort-input-fixture');
+        flush(done);
       });
 
-      test('expect field property to have default value', function() {
-        expect(component.field).to.be.equal('_timestamp');
+      test('"field" does equal default value', function() {
+        expect(component.field).to.equal('_timestamp');
       });
 
-      test('expect orderOptions to be set', function() {
-        expect(component.orderOptions).to.be.deep.equal([{display: 'Best Match'}, {display: 'Newest', order: 'desc'}, {display: 'Oldest', order: 'asc'}]);
+      test('"options" does equal default value', function() {
+        expect(component.options).to.deep.equal([{
+          display: 'Best Match',
+          field: '_score',
+          order: 'desc'
+        }, {
+          display: 'Newest',
+          order: 'desc'
+        }, {
+          display: 'Oldest',
+          order: 'asc'
+        }]);
       });
 
-      test('selectedOption is set to default value', function() {
-        expect(component.selectedOption).to.be.deep.equal({display: 'Best Match'});
+      test('"_menuOptions" does equal correct value', function() {
+        expect(component._menuOptions).to.deep.equal([{
+          display: 'Best Match',
+          value: 'Sort("_score").order("desc")'
+        }, {
+          display: 'Newest',
+          value: 'Sort("_timestamp").order("desc")'
+        }, {
+          display: 'Oldest',
+          value: 'Sort("_timestamp").order("asc")'
+        }]);
       });
 
-      test('sortString is set to expected value', function() {
-        expect(component.sortString).to.be.deep.equal('Sort("_score").order("desc")');
+      test('"selected" does equal default value', function() {
+        expect(component.selected).to.equal('Sort("_score").order("desc")');
       });
 
-      test('when selectedOption changes, sortString is updated', function() {
-        component.selectedOption = component.orderOptions[1];
-        expect(component.sortString).to.be.deep.equal('Sort("_timestamp").order("desc")');
+      test('does select the default paper-item', function() {
+        var element = component.$$('paper-item.iron-selected');
+        expect(element).to.exist;
+        expect(element.innerHTML.trim()).to.equal('Best Match');
+      });
+
+      test('setting "selected" does select the correct paper-item', function(done) {
+        component.selected = 'Sort("_timestamp").order("desc")';
+        flush(function() {
+          var element = component.$$('paper-item.iron-selected');
+          expect(element).to.exist;
+          expect(element.innerHTML.trim()).to.equal('Newest');
+          done();
+        });
+      });
+
+      test('setting "field" does set "_menuOptions" to the correct value', function() {
+        component.field = 'testField';
+        expect(component._menuOptions).to.deep.equal([{
+          display: 'Best Match',
+          value: 'Sort("_score").order("desc")'
+        }, {
+          display: 'Newest',
+          value: 'Sort("testField").order("desc")'
+        }, {
+          display: 'Oldest',
+          value: 'Sort("testField").order("asc")'
+        }]);
+      });
+
+      test('setting "options" does set "_menuOptions" to the correct value', function() {
+        component.options = [{
+          display: 'Sort 1',
+          field: 'field1',
+          order: 'desc'
+        }, {
+          display: 'Sort 2',
+          field: 'field2',
+          order: 'desc'
+        }, {
+          display: 'Newest',
+          field: 'field3',
+          order: 'desc'
+        }];
+
+        expect(component._menuOptions).to.deep.equal([{
+          display: 'Sort 1',
+          value: 'Sort("field1").order("desc")'
+        }, {
+          display: 'Sort 2',
+          value: 'Sort("field2").order("desc")'
+        }, {
+          display: 'Newest',
+          value: 'Sort("field3").order("desc")'
+        }]);
+      });
+
+      test('setting "notificationQuery" does set selected to the correct value', function() {
+        component.notificationQuery = true;
+        expect(component.selected).to.equal('Sort("_timestamp").order("desc")');
+      });
+
+      test('setting "notificationQuery" with custom options does set selected to the correct value', function() {
+        component.options = [{
+          display: 'Sort 1',
+          field: 'field1',
+          order: 'desc'
+        }, {
+          display: 'Sort 2',
+          field: 'field2',
+          order: 'desc'
+        }, {
+          display: 'Newest',
+          field: 'field3',
+          order: 'desc'
+        }];
+        component.notificationQuery = true;
+        expect(component.selected).to.equal('Sort("field3").order("desc")');
       });
     });
   </script>

@@ -10,7 +10,7 @@ Example:
 
     <elastic-sort-input
         field="date"
-        sort-string="{{sortString}}">
+        selected="{{selected}}">
     </elastic-sort-input>
 
 @demo demo/index.html
@@ -32,13 +32,15 @@ Example:
       }
     </style>
     <label>Sort Results By</label>
+    <template is="dom-if" if="[[_menuOptions]]">
     <paper-dropdown-menu>
-      <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{selectedOption}}">
-        <template is="dom-repeat" items="[[orderOptions]]">
-          <paper-item value="[[item]]">[[item.display]]</paper-item>
+      <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{selected}}">
+        <template is="dom-repeat" items="[[_menuOptions]]">
+          <paper-item value="{{item.value}}">[[item.display]]</paper-item>
         </template>
       </paper-menu>
     </paper-dropdown-menu>
+    </template>
   </template>
   <script>
   (function() {
@@ -48,49 +50,85 @@ Example:
       is: 'elastic-sort-input',
 
       properties: {
-        /*
-        * The field on which to sort by -- assuming this will always be a date field.
-        * If no value entered, _timestamp field will be used.
-        */
+        /**
+         * Sort field for menu options that do not have a field.
+         * Default:  '_timestamp'
+         */
         field: {
           type: String,
-          value: '_timestamp',
+          value: '_timestamp'
+        },
+
+        /**
+         * List of sort option objects with the following properties:
+         *   display: The display name for the option in the menu.
+         *   field:   The sort field for the option if different than the 'field' property (if undefined, set to the 'field' property).
+         *   order:   The sort order for the option (if undefined, set to 'desc').
+         */
+        options: {
+          type: Array,
+          value: [{
+            display: 'Best Match',
+            field: '_score',
+            order: 'desc'
+          }, {
+            display: 'Newest',
+            order: 'desc'
+          }, {
+            display: 'Oldest',
+            order: 'asc'
+          }]
+        },
+
+        /**
+         * Selected menu option elasticjs sort value.
+         */
+        selected: {
+          type: String,
+          value: '',
           notify: true
         },
-        /*
-        * The options to choose from.
-        */
-        orderOptions: {
+
+        /**
+         * If viewing a saved query with a notification for new results, sort by newest.
+         */
+        notificationQuery: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: '_sortByNewest'
+        },
+
+        /**
+         * List of options shown in the menu.
+         */
+        _menuOptions: {
           type: Array,
-          value: [{display: 'Best Match'}, {display: 'Newest', order: 'desc'}, {display: 'Oldest', order: 'asc'}],
-          readOnly: true
-        },
-        /*
-        * Option that is selected by the user -- sets sort string when updated.
-        */
-        selectedOption: {
-          type: Object,
-          notify: true,
-          observer: 'onSelectedOptionChange'
-        },
-        /*
-        * String to be passed along to the elastic-sort component
-        */
-        sortString: {
-          type: String,
-          notify: true,
-          readOnly: true
+          computed: '_computeMenuOptions(field, options)'
         }
       },
-      ready: function() {
-        this.selectedOption = this.orderOptions[0];
+
+      attached: function() {
+        this.selected = this._menuOptions[0].value;
       },
-      onSelectedOptionChange: function() {
-        if(this.selectedOption.order && this.field) {
-          this._setSortString('Sort("' + this.field + '").order("' + this.selectedOption.order + '")');
-        } else {
-          // use default sort
-          this._setSortString('Sort("_score").order("desc")');
+
+      _computeMenuOptions: function() {
+        var self = this;
+        var menuOptions = this.options.map(function(option) {
+          return {
+            display: option.display,
+            value: 'Sort("' + (option.field || self.field) + '").order("' + (option.order || 'desc') + '")'
+          };
+        });
+        return menuOptions;
+      },
+
+      _sortByNewest: function() {
+        var index = this._menuOptions.map(function(option) {
+          return option.display;
+        }).indexOf('Newest');
+        if(this.notificationQuery && index >= 0) {
+          this.selected = this._menuOptions[index].value;
         }
       }
     });
