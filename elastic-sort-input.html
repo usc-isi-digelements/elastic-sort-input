@@ -31,15 +31,15 @@ Example:
         font-weight: 500;
       }
     </style>
-    <label>Sort Results By</label>
     <template is="dom-if" if="[[_menuOptions]]">
-    <paper-dropdown-menu>
-      <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{selected}}">
-        <template is="dom-repeat" items="[[_menuOptions]]">
-          <paper-item value="{{item.value}}">[[item.display]]</paper-item>
-        </template>
-      </paper-menu>
-    </paper-dropdown-menu>
+      <label>Sort Results By</label>
+      <paper-dropdown-menu>
+        <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{selected}}">
+          <template is="dom-repeat" items="[[_menuOptions]]">
+            <paper-item value="{{item.value}}">[[item.display]]</paper-item>
+          </template>
+        </paper-menu>
+      </paper-dropdown-menu>
     </template>
   </template>
   <script>
@@ -99,17 +99,23 @@ Example:
       },
 
       attached: function() {
-        this.selected = this._menuOptions[0].value;
+        if(this._menuOptions && this._menuOptions.length > 0) {
+          this.selected = this._menuOptions[0].value;
+        }
       },
 
       _computeMenuOptions: function() {
         var self = this;
-        var menuOptions = this.options.map(function(option) {
-          return {
-            display: option.display,
-            value: 'Sort("' + (option.field || self.field) + '").order("' + (option.order || 'desc') + '")'
-          };
-        });
+        var menuOptions;
+
+        if(this.options) {
+           menuOptions = this.options.map(function(option) {
+            return {
+              display: option.display,
+              value: 'Sort("' + (option.field || self.field) + '").order("' + (option.order || 'desc') + '")'
+            };
+          });
+        }
         return menuOptions;
       }
     });

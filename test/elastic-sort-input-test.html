@@ -14,6 +14,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="elastic-sort-input-fixture-no-options">
+    <template>
+      <elastic-sort-input options="null" field="somefield"></elastic-sort-input>
+    </template>
+  </test-fixture>
+
   <script>
     suite('elastic-sort-input', function() {
       var component;
@@ -56,6 +62,23 @@
 
       test('"selected" does equal default value', function() {
         expect(component.selected).to.equal('Sort("_score").order("desc")');
+      });
+
+      test('DOM has correct elements', function() {
+        var paperItemArray = Polymer.dom(component.root).querySelectorAll('paper-item');
+        expect(component.$$('label')).to.exist;
+        expect(component.$$('label').innerText).to.equal('Sort Results By');
+        expect(component.$$('paper-dropdown-menu')).to.exist;
+        expect(component.$$('paper-menu')).to.exist;
+        expect(component.$$('paper-menu').attrForSelected).to.equal('value');
+        expect(component.$$('paper-menu').selected).to.equal(component.selected);
+        expect(paperItemArray.length).to.equal(3);
+        expect(paperItemArray[0].value).to.equal(component._menuOptions[0].value);
+        expect(paperItemArray[0].textContent.includes(component._menuOptions[0].display)).to.be.true;
+        expect(paperItemArray[1].value).to.equal(component._menuOptions[1].value);
+        expect(paperItemArray[1].textContent.includes(component._menuOptions[1].display)).to.be.true;
+        expect(paperItemArray[2].value).to.equal(component._menuOptions[2].value);
+        expect(paperItemArray[2].textContent.includes(component._menuOptions[2].display)).to.be.true;
       });
 
       test('does select the default paper-item', function() {
@@ -115,6 +138,22 @@
         }]);
       });
     });
+
+    suite('elastic-sort-input - test if options are undefined', function() {
+      var component;
+
+      setup(function(done) {
+        component = fixture('elastic-sort-input-fixture-no-options');
+        flush(done);
+      });
+
+      test('DOM does not have label or dropdown because _menuOptions are undefined', function() {
+        expect(component.$$('label')).to.not.exist;
+        expect(component.$$('paper-dropdown-menu')).to.not.exist;
+        expect(component.$$('paper-menu')).to.not.exist;
+      });
+    });
+
   </script>
 </body>
 </html>
