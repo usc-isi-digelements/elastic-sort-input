@@ -4,14 +4,15 @@
 <link rel="import" href="../paper-menu/paper-menu.html">
 
 <!--
-A polymer web component that shows a dropdown of sorting options for the user and creates the string to pass onto elastic-sort based on the choice clicked.
+A Polymer Element showing a dropdown of sorting options for the user that creates the string to pass onto an elastic-sort element based on the choice clicked.
 
-Example:
-
-    <elastic-sort-input
-        field="date"
-        selected="{{selected}}">
-    </elastic-sort-input>
+### Example
+```html
+<elastic-sort-input
+  field="date"
+  selected="{{selected}}">
+</elastic-sort-input>
+```
 
 @demo demo/index.html
 -->
@@ -31,6 +32,7 @@ Example:
         font-weight: 500;
       }
     </style>
+
     <template is="dom-if" if="[[_menuOptions]]">
       <label>Sort Results By</label>
       <paper-dropdown-menu>
@@ -43,6 +45,7 @@ Example:
     </template>
   </template>
   <script>
+
   (function() {
     'use strict';
 
@@ -51,8 +54,12 @@ Example:
 
       properties: {
         /**
+         * (Optional)
+         *
          * Sort field for menu options that do not have a field.
-         * Default:  '_timestamp'
+         *
+         * @type {String}
+         * @default '_timestamp'
          */
         field: {
           type: String,
@@ -60,10 +67,15 @@ Example:
         },
 
         /**
+         * (Optional)
+         *
          * List of sort option objects with the following properties:
          *   display: The display name for the option in the menu.
          *   field:   The sort field for the option if different than the 'field' property (if undefined, set to the 'field' property).
          *   order:   The sort order for the option (if undefined, set to 'desc').
+         *
+         * @type {Array}
+         * @default [{ display: 'Best Match', field: '_score', order: 'desc' }, { display: 'Newest', order: 'desc' }, { display: 'Oldest', order: 'asc' }]
          */
         options: {
           type: Array,
@@ -81,7 +93,12 @@ Example:
         },
 
         /**
+         * (Output)
+         *
          * Selected menu option elasticjs sort value.
+         *
+         * @type {String}
+         * @default ''
          */
         selected: {
           type: String,
@@ -91,6 +108,9 @@ Example:
 
         /**
          * List of options shown in the menu.
+         *
+         * @type {Array}
+         * @private
          */
         _menuOptions: {
           type: Array,
@@ -98,12 +118,21 @@ Example:
         }
       },
 
+      /**
+       * Select the first menu option when attached.
+       */
       attached: function() {
         if(this._menuOptions && this._menuOptions.length > 0) {
           this.selected = this._menuOptions[0].value;
         }
       },
 
+      /**
+       * Returns the dropdown menu options using the field and options properties.
+       *
+       * @return {Array}
+       * @private
+       */
       _computeMenuOptions: function() {
         var self = this;
         var menuOptions;

@@ -22,19 +22,19 @@
 
   <script>
     suite('elastic-sort-input', function() {
-      var component;
+      var element;
 
       setup(function(done) {
-        component = fixture('elastic-sort-input-fixture');
+        element = fixture('elastic-sort-input-fixture');
         flush(done);
       });
 
       test('"field" does equal default value', function() {
-        expect(component.field).to.equal('_timestamp');
+        expect(element.field).to.equal('_timestamp');
       });
 
       test('"options" does equal default value', function() {
-        expect(component.options).to.deep.equal([{
+        expect(element.options).to.deep.equal([{
           display: 'Best Match',
           field: '_score',
           order: 'desc'
@@ -48,7 +48,7 @@
       });
 
       test('"_menuOptions" does equal correct value', function() {
-        expect(component._menuOptions).to.deep.equal([{
+        expect(element._menuOptions).to.deep.equal([{
           display: 'Best Match',
           value: 'Sort("_score").order("desc")'
         }, {
@@ -61,45 +61,45 @@
       });
 
       test('"selected" does equal default value', function() {
-        expect(component.selected).to.equal('Sort("_score").order("desc")');
+        expect(element.selected).to.equal('Sort("_score").order("desc")');
       });
 
       test('DOM has correct elements', function() {
-        var paperItemArray = Polymer.dom(component.root).querySelectorAll('paper-item');
-        expect(component.$$('label')).to.exist;
-        expect(component.$$('label').innerText).to.equal('Sort Results By');
-        expect(component.$$('paper-dropdown-menu')).to.exist;
-        expect(component.$$('paper-menu')).to.exist;
-        expect(component.$$('paper-menu').attrForSelected).to.equal('value');
-        expect(component.$$('paper-menu').selected).to.equal(component.selected);
+        var paperItemArray = Polymer.dom(element.root).querySelectorAll('paper-item');
+        expect(element.$$('label')).to.exist;
+        expect(element.$$('label').innerText).to.equal('Sort Results By');
+        expect(element.$$('paper-dropdown-menu')).to.exist;
+        expect(element.$$('paper-menu')).to.exist;
+        expect(element.$$('paper-menu').attrForSelected).to.equal('value');
+        expect(element.$$('paper-menu').selected).to.equal(element.selected);
         expect(paperItemArray.length).to.equal(3);
-        expect(paperItemArray[0].value).to.equal(component._menuOptions[0].value);
-        expect(paperItemArray[0].textContent.includes(component._menuOptions[0].display)).to.be.true;
-        expect(paperItemArray[1].value).to.equal(component._menuOptions[1].value);
-        expect(paperItemArray[1].textContent.includes(component._menuOptions[1].display)).to.be.true;
-        expect(paperItemArray[2].value).to.equal(component._menuOptions[2].value);
-        expect(paperItemArray[2].textContent.includes(component._menuOptions[2].display)).to.be.true;
+        expect(paperItemArray[0].value).to.equal(element._menuOptions[0].value);
+        expect(paperItemArray[0].textContent.includes(element._menuOptions[0].display)).to.be.true;
+        expect(paperItemArray[1].value).to.equal(element._menuOptions[1].value);
+        expect(paperItemArray[1].textContent.includes(element._menuOptions[1].display)).to.be.true;
+        expect(paperItemArray[2].value).to.equal(element._menuOptions[2].value);
+        expect(paperItemArray[2].textContent.includes(element._menuOptions[2].display)).to.be.true;
       });
 
       test('does select the default paper-item', function() {
-        var element = component.$$('paper-item.iron-selected');
-        expect(element).to.exist;
-        expect(element.innerHTML.trim()).to.equal('Best Match');
+        var item = element.$$('paper-item.iron-selected');
+        expect(item).to.exist;
+        expect(item.innerHTML.trim()).to.equal('Best Match');
       });
 
       test('setting "selected" does select the correct paper-item', function(done) {
-        component.selected = 'Sort("_timestamp").order("desc")';
+        element.selected = 'Sort("_timestamp").order("desc")';
         flush(function() {
-          var element = component.$$('paper-item.iron-selected');
-          expect(element).to.exist;
-          expect(element.innerHTML.trim()).to.equal('Newest');
+          var item = element.$$('paper-item.iron-selected');
+          expect(item).to.exist;
+          expect(item.innerHTML.trim()).to.equal('Newest');
           done();
         });
       });
 
       test('setting "field" does set "_menuOptions" to the correct value', function() {
-        component.field = 'testField';
-        expect(component._menuOptions).to.deep.equal([{
+        element.field = 'testField';
+        expect(element._menuOptions).to.deep.equal([{
           display: 'Best Match',
           value: 'Sort("_score").order("desc")'
         }, {
@@ -112,7 +112,7 @@
       });
 
       test('setting "options" does set "_menuOptions" to the correct value', function() {
-        component.options = [{
+        element.options = [{
           display: 'Sort 1',
           field: 'field1',
           order: 'desc'
@@ -126,7 +126,7 @@
           order: 'desc'
         }];
 
-        expect(component._menuOptions).to.deep.equal([{
+        expect(element._menuOptions).to.deep.equal([{
           display: 'Sort 1',
           value: 'Sort("field1").order("desc")'
         }, {
@@ -140,20 +140,19 @@
     });
 
     suite('elastic-sort-input - test if options are undefined', function() {
-      var component;
+      var element;
 
       setup(function(done) {
-        component = fixture('elastic-sort-input-fixture-no-options');
+        element = fixture('elastic-sort-input-fixture-no-options');
         flush(done);
       });
 
       test('DOM does not have label or dropdown because _menuOptions are undefined', function() {
-        expect(component.$$('label')).to.not.exist;
-        expect(component.$$('paper-dropdown-menu')).to.not.exist;
-        expect(component.$$('paper-menu')).to.not.exist;
+        expect(element.$$('label')).to.not.exist;
+        expect(element.$$('paper-dropdown-menu')).to.not.exist;
+        expect(element.$$('paper-menu')).to.not.exist;
       });
     });
-
   </script>
 </body>
 </html>
