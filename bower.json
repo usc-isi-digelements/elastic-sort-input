@@ -1,7 +1,7 @@
 {
   "name": "elastic-sort-input",
   "description": "A Polymer Element showing a dropdown of sorting options for the user that creates the string to pass onto an elastic-sort element based on the choice clicked.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [
@@ -10,7 +10,6 @@
     "elasticjs"
   ],
   "main": "elastic-sort-input.html",
-  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/DigElements/elastic-sort-input/",
   "ignore": [
     "/.*",
