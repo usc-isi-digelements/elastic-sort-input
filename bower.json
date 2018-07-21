@@ -10,7 +10,7 @@
     "elasticjs"
   ],
   "main": "elastic-sort-input.html",
-  "homepage": "https://github.com/DigElements/elastic-sort-input/",
+  "homepage": "https://github.com/usc-isi-digelements/elastic-sort-input/",
   "ignore": [
     "/.*",
     "/test/"
